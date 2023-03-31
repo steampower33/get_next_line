@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:05:31 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/03/31 22:32:34 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:04:18 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,7 @@ char	*get_next_line(int fd)
 		buf[size] = '\0';
 		// printf("%d %s\n", size, buf);
 		// printf("%ld\n", ft_strchr(buf, '\n') - buf);
-		tmp = ft_strndup(buf, BUFFER_SIZE + 1);
-		if (ft_strchr(buf, '\n'))
-		{
-			if (!lst->line)
-			{
-				lst->line = ft_strndup(buf, ft_strchr(buf, '\n') - buf + 1);
-				lst->idx = ft_strchr(buf, '\n') - buf + 2;
-			}
-			else
-			{
-				if (ft_strchr(lst->line, '\n'))
-				{
-					free(lst->line);
-					lst->line = NULL;
-				}
-				lst->line = ft_strndup(buf, ft_strchr(buf, '\n') - buf + 1);
-			}
-			break ;
-		}
+		
 	}
 	return (lst->line);
 }

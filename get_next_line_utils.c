@@ -6,11 +6,21 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/31 16:32:05 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/03/31 22:11:04 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/03/31 23:02:10 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
+}
 
 t_list	*ft_lstnew(int fd)
 {
@@ -43,39 +53,36 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-char	*ft_strncat(char *dest, char *src, size_t nb)
+static char	*ft_strcat(char *s, const char *s1, const char *s2)
 {
-	size_t	src_len;
-	size_t	dest_len;
+	size_t	idx;
 
-	dest_len = 0;
-	src_len = 0;
-	while (dest[dest_len])
-		dest_len++;
-	while ((src[src_len] != '\0') && src_len < nb)
+	idx = 0;
+	while (idx < ft_strlen(s1))
 	{
-		dest[dest_len] = src[src_len];
-		dest_len++;
-		src_len++;
+		s[idx] = s1[idx];
+		idx++;
 	}
-	dest[dest_len] = '\0';
-	return (dest);
+	idx = 0;
+	while (idx < ft_strlen(s2))
+	{
+		s[ft_strlen(s1) + idx] = s2[idx];
+		idx++;
+	}
+	s[ft_strlen(s1) + idx] = '\0';
+	return (s);
 }
 
-char	*ft_strndup(const char *src, size_t size)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	dest_len;
-	char	*dest;
+	size_t	len;
+	char	*s;
 
-	dest = (char *)malloc((sizeof(char) * (size + 1)));
-	if (dest == NULL)
+	if (!ft_strlen(s1) && !ft_strlen(s2))
+		return ((char *)ft_calloc(sizeof(char), 1));
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	s = (char *) malloc(sizeof(char) * len);
+	if (!s)
 		return (NULL);
-	dest_len = 0;
-	while (dest_len < size)
-	{
-		dest[dest_len] = src[dest_len];
-		dest_len++;
-	}
-	dest[dest_len] = '\0';
-	return (dest);
+	return (ft_strcat(s, s1, s2));
 }
