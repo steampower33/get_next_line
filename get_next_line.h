@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:06:40 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/03/31 22:54:50 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/01 16:39:07 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 typedef struct s_list
 {
 	int		fd;
-	int		idx;
 	char	*line;
+	char	*prev;
 	char	*next;
 }	t_list;
 
