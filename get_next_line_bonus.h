@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:06:40 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/07 21:48:20 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/08 18:16:49 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@
 
 typedef struct s_list
 {
-	char	*buf;
-	int		fd;
 	struct s_list	*next;
-	struct s_list	*prev;
-}	t_list;
+	char			*buf;
+	int				fd;
+}	t_list; 
 
 char	*get_next_line(int fd);
 

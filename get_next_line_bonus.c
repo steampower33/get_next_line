@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:05:31 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/07 21:53:21 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/08 18:17:18 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,36 +60,53 @@ char	*ft_set_line(char **buf)
 	return (res);
 }
 
-t_list	*ft_get_list(int fd, t_list *fd_list)
+t_list	*ft_find_fd_node(t_list **fd_list, int fd)
 {
 	t_list	*fd_node;
 	t_list	*fd_prev;
 
-	if (!fd_list)
-	{
-		fd_list = (t_list *)malloc(sizeof(t_list));
-		fd_list->fd = fd;
-		return (fd_list);
-	}
-	fd_node = fd_list;
-	while (1)
+	fd_prev = NULL;
+	fd_node = *fd_list;
+	while (fd_node)
 	{
 		if (fd_node->fd == fd)
 			return (fd_node);
-		if (!fd_node->next)
-		{
-			fd_node->buf = NULL;
-			fd_node->fd = fd;
-			fd_node->next = NULL;
-			return (fd_node);
-		}
-		else
-		{
-			fd_prev = fd_node;
-			fd_node = fd_node->next;
-			fd_node->prev = fd_prev;
-		}
+		fd_prev = fd_node;
+		fd_node = fd_node->next;
 	}
+	fd_node = (t_list *)malloc(sizeof(t_list));
+	if (!fd_node)
+		return (NULL);
+	fd_node->fd = fd;
+	fd_node->buf = NULL;
+	fd_node->next = NULL;
+	if (fd_prev)
+		fd_prev->next = fd_node;
+	else
+		*fd_list = fd_node;
+	return (fd_node);
+}
+
+void	ft_del_fd_node(t_list **fd_list, int fd)
+{
+	t_list	*fd_prev;
+	t_list	*fd_node;
+
+	fd_prev = NULL;
+	fd_node = *fd_list;
+	while (fd_node)
+	{
+		if (fd_node->fd == fd)
+			break ;
+		fd_prev = fd_node;
+		fd_node = fd_node->next;
+	}
+	if (fd_prev)
+		fd_prev->next = fd_node->next;
+	else
+		*fd_list = fd_node->next;
+	free(fd_node->buf);
+	free(fd_node);
 }
 
 char	*get_next_line(int fd)
@@ -97,22 +114,20 @@ char	*get_next_line(int fd)
 	static t_list	*fd_list;
 	t_list			*fd_node;
 	char			*line;
-	t_list			*fd_prev;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	fd_node = ft_get_list(fd, fd_list);
+	fd_node = ft_find_fd_node(&fd_list, fd);
 	if (!fd_node)
 		return (NULL);
 	fd_node->buf = ft_get_line(fd, fd_node->buf);
 	if (!fd_node->buf || !*fd_node->buf)
 	{
-		fd_prev = fd_node->prev;
-		fd_prev->next = fd_node->next;
-		free(fd_node->buf);
-		free(fd_node);
+		ft_del_fd_node(&fd_list, fd);
 		return (NULL);
 	}
 	line = ft_set_line(&fd_node->buf);
+	if (!line)
+		ft_del_fd_node(&fd_list, fd);
 	return (line);
 }

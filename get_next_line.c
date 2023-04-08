@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:05:31 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/07 19:58:56 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/08 18:20:33 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,74 @@ char	*ft_set_line(char **buf)
 	return (res);
 }
 
+t_list	*ft_find_fd_node(t_list **fd_list, int fd)
+{
+	t_list	*fd_node;
+	t_list	*fd_prev;
+
+	fd_prev = NULL;
+	fd_node = *fd_list;
+	while (fd_node)
+	{
+		if (fd_node->fd == fd)
+			return (fd_node);
+		fd_prev = fd_node;
+		fd_node = fd_node->next;
+	}
+	fd_node = (t_list *)malloc(sizeof(t_list));
+	if (!fd_node)
+		return (NULL);
+	fd_node->fd = fd;
+	fd_node->buf = NULL;
+	fd_node->next = NULL;
+	if (fd_prev)
+		fd_prev->next = fd_node;
+	else
+		*fd_list = fd_node;
+	return (fd_node);
+}
+
+void	ft_del_fd_node(t_list **fd_list, int fd)
+{
+	t_list	*fd_prev;
+	t_list	*fd_node;
+
+	fd_prev = NULL;
+	fd_node = *fd_list;
+	while (fd_node)
+	{
+		if (fd_node->fd == fd)
+			break ;
+		fd_prev = fd_node;
+		fd_node = fd_node->next;
+	}
+	if (fd_prev)
+		fd_prev->next = fd_node->next;
+	else
+		*fd_list = fd_node->next;
+	free(fd_node->buf);
+	free(fd_node);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*buf;
-	char		*line;
+	static t_list	*fd_list;
+	t_list			*fd_node;
+	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buf = ft_get_line(fd, buf);
-	if (!buf || !*buf)
+	fd_node = ft_find_fd_node(&fd_list, fd);
+	if (!fd_node)
+		return (NULL);
+	fd_node->buf = ft_get_line(fd, fd_node->buf);
+	if (!fd_node->buf || !*fd_node->buf)
 	{
-		free(buf);
-		buf = NULL;
+		ft_del_fd_node(&fd_list, fd);
 		return (NULL);
 	}
-	line = ft_set_line(&buf);
+	line = ft_set_line(&fd_node->buf);
+	if (!line)
+		ft_del_fd_node(&fd_list, fd);
 	return (line);
 }
