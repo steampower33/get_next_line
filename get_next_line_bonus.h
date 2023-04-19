@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:06:40 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/08 18:16:49 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:18:05 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ char	*ft_strndup(const char *src, size_t size);
 #endif
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1000000000
+# define BUFFER_SIZE 42
 
 #endif

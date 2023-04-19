@@ -6,13 +6,13 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:05:31 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/08 19:30:17 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:16:57 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_get_line(int fd, char *buf)
+char	*ft_readline(int fd, char *buf)
 {
 	char	readline[BUFFER_SIZE + 1];
 	char	*res;
@@ -41,7 +41,7 @@ char	*ft_get_line(int fd, char *buf)
 	return (res);
 }
 
-char	*ft_set_line(char **buf)
+char	*ft_set_buf(char **buf)
 {
 	char	*res;
 	char	*tmp;
@@ -119,13 +119,13 @@ char	*get_next_line(int fd)
 	fd_node = ft_find_fd_node(&fd_list, fd);
 	if (!fd_node)
 		return (NULL);
-	fd_node->buf = ft_get_line(fd, fd_node->buf);
+	fd_node->buf = ft_readline(fd, fd_node->buf);
 	if (!fd_node->buf || !*fd_node->buf)
 	{
 		ft_del_fd_node(&fd_list, fd);
 		return (NULL);
 	}
-	line = ft_set_line(&fd_node->buf);
+	line = ft_set_buf(&fd_node->buf);
 	if (!line)
 		ft_del_fd_node(&fd_list, fd);
 	return (line);
