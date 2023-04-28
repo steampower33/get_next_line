@@ -6,7 +6,7 @@
 /*   By: seunlee2 <seunlee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 17:05:31 by seunlee2          #+#    #+#             */
-/*   Updated: 2023/04/19 16:17:01 by seunlee2         ###   ########.fr       */
+/*   Updated: 2023/04/24 18:45:51 by seunlee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,8 @@ char	*get_next_line(int fd)
 	if (!fd_node)
 		return (NULL);
 	fd_node->buf = ft_readline(fd, fd_node->buf);
-	if (!fd_node->buf || !*fd_node->buf)
+	if (!fd_node->buf)
 	{
-		ft_del_fd_node(&fd_list, fd);
 		return (NULL);
 	}
 	line = ft_set_buf(&fd_node->buf);
